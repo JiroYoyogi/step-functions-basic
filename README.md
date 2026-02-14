@@ -1,6 +1,12 @@
-# フロートとステート
+# フローとステート
 
-文法的な話
+文法の学習
+
+## ステートマシンの作成
+
+- 空白から作成
+- ステートマシン名： `sfn-hands-on`
+- ステートマシンのタイプ： `標準`
 
 ## Pass
 
@@ -195,3 +201,38 @@ Passを3つ追加
   "name": "ウェイト"
 }
 ```
+
+# 転職ステートマシーン
+
+## ステートマシンの作成
+
+- 空白から作成
+- ステートマシン名： `sfn-hands-on-change-job`
+- ステートマシンのタイプ： `標準`
+
+## Step.1
+
+基本
+
+- Pass
+- DynamoDB PutItem
+- Pass
+
+## Step.2
+
+転職
+
+- Map
+- Lambda Invoke
+- DynamoDB UpdateItem
+- 成功
+
+## Step.3
+
+現職
+
+- DynamoDB UpdateItem
+- Wait
+- DynamoDB GetItem
+- Choice
+- 成功 or DynamoDB UpdateItem
