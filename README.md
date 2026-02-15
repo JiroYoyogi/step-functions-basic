@@ -5,13 +5,13 @@
 ## ステートマシンの作成
 
 - 空白から作成
-- ステートマシン名： `sfn-hands-on`
-- ステートマシンのタイプ： `標準`
+- ステートマシン名：`sfn-hands-on`
+- ステートマシンのタイプ：`標準`
 
 ## Pass
 
 - データの整形
-- ダミー処理
+- ダミー処理（※まだLambdaを作れていないなど）
 - etc
 
 ### Passを追加
@@ -50,6 +50,15 @@ Passを3つ追加
 }
 ```
 
+- 2つ目のPassの出力を変更
+
+```
+{
+  "count": "{% $states.input.count + 1 %}",
+  "message": "{% 'IDは' & $executionId & 'です' %}"
+}
+```
+
 - 実行時に入力を渡す
 
 ```
@@ -68,6 +77,8 @@ Passを3つ追加
 ```
 
 ## Choice
+
+if文
 
 - Choiceを追加
 - 「成功」と「Fail」に分岐
@@ -91,6 +102,8 @@ Passを3つ追加
 ※ Failはステートマシーンが"失敗した"として強制終了。逆に成功はステートマシーンが"成功した"として強制終了
 
 ## Map
+
+配列の各要素に対しての処理
 
 - 配列を処理
 - S3のJSON一覧を取得して加工するなど
@@ -181,6 +194,8 @@ Passを3つ追加
 
 ## Parallel
 
+並行処理
+
 - DynamoDB GetItemの後にParallelを配置
 - 左に元々あったPass、右にWaitを配置
 
@@ -207,8 +222,45 @@ Passを3つ追加
 ## ステートマシンの作成
 
 - 空白から作成
-- ステートマシン名： `sfn-hands-on-change-job`
+- ステートマシン名： `sfn-job-hunting`
 - ステートマシンのタイプ： `標準`
+
+## リソース作成
+
+### DynamoDB
+
+転職活動の結果・応募の合否を保存
+
+- テーブル名：`job-hunting`
+- パーティションキー：`id`
+
+### Lambda
+
+企業側の選考プロセスをイメージしたもの
+
+- 関数名：`job-hunting-selection`
+- ランタイム：`nodejs24.x`
+
+```js
+export const handler = async (event) => {
+  // 0〜10秒の間でランダムな待ち時間
+  const waitTime = Math.floor(Math.random() * 5000);
+  
+  console.log(`${event.name || '企業'} の結果を待っています... (${waitTime}ms)`);
+  
+  await new Promise(resolve => setTimeout(resolve, waitTime));
+
+  const companyName = event.name || "不明な企業";
+  const isPassed = Math.random() > 0.5;
+  const resultStatus = isPassed ? "合格" : "お祈り";
+  
+  return {
+    company: companyName,
+    status: resultStatus,
+    waitTime: `${waitTime / 1000}秒`
+  };
+};
+```
 
 ## Step.1
 
