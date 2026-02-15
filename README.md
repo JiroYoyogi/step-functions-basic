@@ -47,19 +47,19 @@ Passを3つ追加
 
 #### Step.2
 
-- 2つ目のPassの出力
-
-```
-{
-  "count": "{% $states.input.count + 1 %}"
-}
-```
-
 - 1つ目のPassの変数
 
 ```
 {
   "executionId": "{% $states.context.Execution.Id %}"
+}
+```
+
+- 2つ目のPassの出力
+
+```
+{
+  "count": "{% $states.input.count + 1 %}"
 }
 ```
 
