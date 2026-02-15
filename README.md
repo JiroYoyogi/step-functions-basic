@@ -103,7 +103,7 @@ if文
 - Condition
 
 ```
-{% ($states.input.count) > (100) %}
+{% $states.input.count > 100 %}
 ```
 
 ### Fail
